@@ -11,9 +11,12 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(() => {
-    console.log(`Connected to the database`);
+  .then(self => {
+    console.log(`Connected to the database && erasing all the database at the beginning`);
     // Run your code here, after you have insured that the connection was made
+    return self.connection.dropDatabase();
+  })
+  .then(() => {
     return Recipe.create({
       title: 'Lasagna',
       level: 'Easy Peasy',
@@ -26,6 +29,22 @@ mongoose
   })
   .then(recipeFile => {
     return Recipe.find({ title: 'Lasagna' });
+  })
+  .then(lasagna => {
+    console.log(lasagna);
+    return Recipe.insertMany(data);
+  })
+  .then(recipeFile => {
+    return Recipe.find({}, { _id: 0, title: 1 });
+  })
+  .then(recipeFile => {
+    return Recipe.updateOne({ title: 'Rigatoni alla Genovese' }, { duration: 100 });
+  })
+  .then(() => {
+    return Recipe.find({ title: 'Rigatoni alla Genovese' });
+  })
+  .then(recipeFile => {
+    return Recipe.deleteOne({ title: 'Carrot Cake' });
   })
   .then(whatComesFromPreviousThen => {
     console.log(whatComesFromPreviousThen);
